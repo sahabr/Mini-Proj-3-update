@@ -24,7 +24,7 @@ d3.csv('rounds.csv', d3.autoType).then((data) => {
   let year=2014;
   const barchart = BarChart('.chart-container1');
   barchart.slider(data);
-  year=document.getElementById("value").value;
+  //year=document.getElementById("value").value;
   //console.log(year);
   barchart.update(data, type,year);
   

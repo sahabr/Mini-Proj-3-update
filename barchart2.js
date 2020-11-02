@@ -37,23 +37,22 @@ export default function BarChart(container) {
 
         let minYear = d3.min(data, (d) => d.funded_year);
         let maxYear = d3.max(data, (d) => d.funded_year);
-        
-        let value;
+
         var slider = d3
             .sliderHorizontal()
             .min(minYear)
             .max(maxYear)
-            .tickFormat(d3.timeFormat("%Y"))
+            .default(2014)
+            .tickFormat(d3.format("d"))
             .step(1)
             .width(300)
-            .displayValue(false)
+            .displayValue(true)
             .on('onchange', function (val) {
                 d3.select('#value').text(val);
                 //console.log(yearSelect);
 
             });
 
-console.log(value);
 
         d3.select('#slider')
             .append('svg')
@@ -65,7 +64,8 @@ console.log(value);
         
     }
 
-    function update(data, type, year) {        
+    function update(data, type, year) {       
+         
         
         const select = {};
         let column;
