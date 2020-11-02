@@ -32,36 +32,6 @@ export default function BarChart(container) {
     const yAxis = d3.axisLeft().scale(yScale);
     let yAxisGroup = group.append('g').attr('class', 'y-axis axis');
 
-    /*function slider(data){
-        //console.log(d3.select('#value').text('200'));
-
-        let minYear = d3.min(data, (d) => d.funded_year);
-        let maxYear = d3.max(data, (d) => d.funded_year);
-
-        var slider = d3
-            .sliderHorizontal()
-            .min(minYear)
-            .max(maxYear)
-            .default(2014)
-            .tickFormat(d3.format("d"))
-            .step(1)
-            .width(300)
-            .displayValue(false)
-            .on('onchange', function (val) {
-                document.getElementById("value").innerHTML=val;
-                year=val;
-
-            });
-        d3.select('#slider')
-            .append('svg')
-            .attr('width', 500)
-            .attr('height', 100)
-            .append('g')
-            .attr('transform', 'translate(30,30)')
-            .call(slider);
-            
-
-    }*/
 
     function update(data, type, years) {       
          
@@ -117,22 +87,7 @@ export default function BarChart(container) {
             return [e,tenYearsBefore[e]];
         })
 
-       /* var percent_change=[];
-        for (var i=0; i<10;i++){
-            let dif = sliced_values[i][1]-sliced_values_past[i][1];
-            let percent = dif/sliced_values_past[i][1]*100;    
-            percent_change.push(percent);       
-        }
 
-        //key:value
-        var percentChange = new Map(); 
-      
-        for(var i = 0; i < sliced_keys.length; i++){ 
-            percentChange.set(sliced_keys[i], percent_change[i]); 
-        }
-
-        console.log(select);
-        //console.log(percent_change);*/
  
         let array_values = sliced_keys.map((e)=>{
             return [e,[select[e],tenYearsBefore[e],parseInt((select[e]-tenYearsBefore[e])/tenYearsBefore[e]*100)]];
