@@ -32,7 +32,7 @@ export default function BarChart(container) {
     const yAxis = d3.axisLeft().scale(yScale);
     let yAxisGroup = group.append('g').attr('class', 'y-axis axis');
 
-    function slider(data){
+    /*function slider(data){
         //console.log(d3.select('#value').text('200'));
 
         let minYear = d3.min(data, (d) => d.funded_year);
@@ -61,11 +61,12 @@ export default function BarChart(container) {
             .call(slider);
             
 
-    }
+    }*/
 
-    function update(data, type, year) {       
+    function update(data, type, years) {       
          
-        
+        years=parseInt(years);
+
         const select = {};
         let column;
         if (type==='country'){
@@ -82,14 +83,14 @@ export default function BarChart(container) {
              const count = el[column];
              if (!count) return;
              const year = el['funded_year'];
-             if (year === 2014) {
+             if (year === years) {
                  if (select[count]) {
                      select[count]++;
                  } else {
                      select[count] = 1;
                  }
              }
-             if (year === 2014-10) {
+             if (year === years-10) {
                 if (tenYearsBefore[count]) {
                     tenYearsBefore[count]++;
                 } else {
@@ -98,7 +99,7 @@ export default function BarChart(container) {
             }
          });
 
-
+//console.log(years);
         const keys = Object.keys(select);
         keys.sort((a, b) => select[b] - select[a]);
 
@@ -116,8 +117,7 @@ export default function BarChart(container) {
             return [e,tenYearsBefore[e]];
         })
 
-
-        var percent_change=[];
+       /* var percent_change=[];
         for (var i=0; i<10;i++){
             let dif = sliced_values[i][1]-sliced_values_past[i][1];
             let percent = dif/sliced_values_past[i][1]*100;    
@@ -130,12 +130,16 @@ export default function BarChart(container) {
         for(var i = 0; i < sliced_keys.length; i++){ 
             percentChange.set(sliced_keys[i], percent_change[i]); 
         }
-        console.log(percentChange);
+
+        console.log(select);
+        //console.log(percent_change);*/
+ 
+        let array_values = sliced_keys.map((e)=>{
+            return [e,[select[e],tenYearsBefore[e],parseInt((select[e]-tenYearsBefore[e])/tenYearsBefore[e]*100)]];
+        })
+        console.log(array_values);
 
 
-        
-console.log(percent_change);
-            
         
         xScale.domain(sliced_keys);
         yScale.domain([0, values[0][1]]);
@@ -147,7 +151,7 @@ console.log(percent_change);
         
         let bar = group
             .selectAll('rect')
-            .data(sliced_values);
+            .data(array_values);
 
         bar
             .enter()
@@ -159,8 +163,8 @@ console.log(percent_change);
                     .style('display', 'inline-block')
                     .style('top', pos[1] + 7 + 'px')
                     .style('left', pos[0] + 7 + 'px')
-                    .html("Category: "+ type + "<br>" + "Current Count: " + sliced_values); //FIX THE TOOLTIP
-                        //("year: " + years + "<br>" + type + ": " + d[0] + "<br>Rounds: " + d[1]).toUpperCase());
+                    .html(("year: " + years + "<br>" + type + ": " + d[0] + "<br>Rounds: " + d[1][0]
+                    + "<br>Rounds 10 yrs ago: " +d[1][1]+ "<br> Percent Change: "+d[1][2]+"%").toUpperCase());
             })
             .on("mouseleave", (event, d) => {
                 d3.select('.tooltip')
@@ -171,15 +175,17 @@ console.log(percent_change);
             .transition()
             .duration(500)
             .attr('x', d => xScale(d[0]))
-            .attr('y',d=>yScale(d[1]))
+            .attr('y',d=>yScale(d[1][0]))
             .attr('width', d => xScale.bandwidth())
-            .attr('height', d => (height-yScale(d[1])))
+            .attr('height', d => (height-yScale(d[1][0])))
             .attr('fill', '#0066CC');
 
             bar.exit().remove();
+
+
+
     }
     return {
         update,
-        slider,
     };
 }
