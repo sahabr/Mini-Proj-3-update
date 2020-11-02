@@ -21,12 +21,14 @@ d3.csv('rounds.csv', d3.autoType).then((data) => {
        });
   console.log(data);
 
-  let year=2014;
+
   const barchart = BarChart('.chart-container1');
+
+  document.getElementById("value").innerHTML=2014;
   barchart.slider(data);
-  //year=document.getElementById("value").value;
+  let year=document.getElementById("value").innerHTML;
   //console.log(year);
-  barchart.update(data, type,year);
+  barchart.update(data, type, year);
   
 
 
