@@ -2,7 +2,7 @@
 
 
 
-import BarChart from './barchart3.js';
+import BarChart from './barchart2.js';
 d3.csv('rounds.csv', d3.autoType).then((data) => {
 
 
